@@ -1,5 +1,6 @@
 import asyncio
 import random
+import re
 
 from loguru import logger
 
@@ -231,6 +232,12 @@ class Leaderboard:
             status = response_json.get("status", None)
             points = response_json.get("points", None)
 
+            if "This task is currently being processed" in response.text:
+                logger.success(
+                    f"[{self.neuraverse.account_index}] | Quest {quest_name} is currently being processed."
+                )
+                return True
+
             if not status:
                 raise Exception(response.text)
 
@@ -448,8 +455,32 @@ class Leaderboard:
     @retry_async(default_value=False)
     async def faucet(self) -> bool:
         try:
-            logger.error(f"[{self.neuraverse.account_index}] | Faucet does not work for now. Let me know in Starlabs chat when the faucet starts working.")
-            return False
+            # logger.error(f"[{self.neuraverse.account_index}] | Faucet does not work for now. Let me know in Starlabs chat when the faucet starts working.")
+            # return False
+            
+            headers = {
+                'sec-ch-ua-platform': '"Windows"',
+                'Referer': 'https://neuraverse.neuraprotocol.io/?section=faucet',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36',
+                'sec-ch-ua': '"Chromium";v="142", "Google Chrome";v="142", "Not_A Brand";v="99"',
+                'sec-ch-ua-mobile': '?0',
+            }
+
+            response = await self.neuraverse.session.get('https://neuraverse.neuraprotocol.io/_next/static/chunks/3419-85a58a988091577a.js', headers=headers)
+
+            # Parse the action ID from the JavaScript code
+            action_id = None
+            js_code = response.text
+            
+            pattern = r'createServerReference\)\("([a-f0-9]+)"'
+            match = re.search(pattern, js_code)
+            
+            if match:
+                action_id = match.group(1)
+
+            else:
+                logger.error(f"[{self.neuraverse.account_index}] | Failed to extract action ID")
+                return False
             
             cookies = {
                 "privy-token": self.neuraverse.privy_session_token,
@@ -461,7 +492,7 @@ class Leaderboard:
                 "accept": "text/x-component",
                 "accept-language": "en-US,en;q=0.9,ru;q=0.8,zh-TW;q=0.7,zh;q=0.6,uk;q=0.5",
                 "content-type": "text/plain;charset=UTF-8",
-                "next-action": "78d30d59c8b72e2764652e54a911a68b75852982b3",
+                "next-action": action_id,
                 "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2Cnull%2Cnull%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
                 "origin": "https://neuraverse.neuraprotocol.io",
                 "priority": "u=1, i",
