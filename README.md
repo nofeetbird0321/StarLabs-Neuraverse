@@ -353,6 +353,53 @@ ADVANCED_FLOW = [
 6. **Bridge Timing**: Wait at least 60 seconds for bridge validation before claiming
 7. **Gas Reserves**: Bot automatically reserves ANKR for transaction fees
 
+## 🔒 Security Warnings
+
+**CRITICAL - Read Before Using:**
+
+1. **Private Key Security**: 
+   - Never share your `private_keys.txt` file
+   - Never commit sensitive files to Git
+   - Store private keys in encrypted storage when not in use
+   - Each private key has full access to your wallet funds
+
+2. **SSL Verification**:
+   - SSL verification is disabled by default (`SKIP_SSL_VERIFICATION: true`)
+   - This makes the tool vulnerable to man-in-the-middle attacks
+   - Only disable SSL for troubleshooting, re-enable for production use
+   - Your private keys and API calls could be intercepted if SSL is disabled
+
+3. **Proxy Security**:
+   - Only use trusted proxy providers
+   - Proxies can see all your traffic including API requests
+   - Malicious proxies could steal your credentials
+   - Verify proxy provider reputation before use
+
+4. **API Keys**:
+   - Keep your captcha solver API keys private
+   - Monitor API key usage for unexpected activity
+   - Rotate keys regularly if exposed
+
+5. **Database Backup**:
+   - Back up `data/accounts.db` securely
+   - Database contains wallet task history
+   - Loss of database means loss of task tracking
+
+6. **Terms of Service**:
+   - Automation may violate platform ToS
+   - Use at your own risk
+   - Account bans are possible
+   - No liability for misuse
+
+**Recommended Security Practices:**
+- Use a dedicated wallet with limited funds
+- Test with small amounts first
+- Use hardware wallet for main funds
+- Keep bot running on secure, isolated machine
+- Monitor logs for unusual activity
+- Keep all dependencies updated
+- Use unique passwords for all services
+
 ## 📜 License
 MIT License
 
