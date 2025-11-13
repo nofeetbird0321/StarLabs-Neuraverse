@@ -73,6 +73,8 @@ def get_headers(session: primp.AsyncClient, **kwargs) -> dict:
     """
     cookies = session.cookies
 
+    # Note: This is Twitter/X's public API bearer token, not a private credential
+    # This token is used for unauthenticated API requests and is publicly available
     headers = kwargs | {
         "authorization": "Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs=1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA",
         # "cookie": "; ".join(f"{k}={v}" for k, v in cookies.items()),

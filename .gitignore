@@ -10,3 +10,20 @@ app.log
 src/version.txt
 /src/utils/dashboard
 /src/utils/config_interface
+
+# Database files - prevent accidental commit of wallet data
+data/*.db
+data/*.db-journal
+*.sqlite
+*.sqlite3
+
+# Log files - may contain sensitive information
+logs/
+*.log
+
+# Sensitive data files - NEVER commit these!
+# Uncomment if you want to prevent accidental commits:
+# data/private_keys.txt
+# data/discord_tokens.txt
+# data/twitter_tokens.txt
+# data/proxies.txt

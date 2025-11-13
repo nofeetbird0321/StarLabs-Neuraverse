@@ -93,6 +93,9 @@ BRIDGE:
     BRIDGE_ALL_TO_ANKR: true
 
 OTHERS:
+    # WARNING: Disabling SSL verification makes you vulnerable to man-in-the-middle attacks
+    # Your private keys, API requests, and sensitive data could be intercepted
+    # Only disable for troubleshooting - ALWAYS enable for production use
     SKIP_SSL_VERIFICATION: true
     USE_PROXY_FOR_RPC: true
     ENABLE_BROWSER_DASHBOARD: true

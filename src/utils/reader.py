@@ -61,7 +61,18 @@ def read_private_keys(file_path: str) -> list:
                     # Try to process as a private key
                     if not key.startswith("0x"):
                         key = "0x" + key
-                    # Verify that it's a valid private key
+                    
+                    # Validate private key format (must be 66 chars with 0x prefix or 64 without)
+                    if len(key) != 66:
+                        raise ValueError(f"Invalid private key length: {len(key)} (expected 66 with '0x' prefix)")
+                    
+                    # Verify it's valid hex
+                    try:
+                        int(key, 16)
+                    except ValueError:
+                        raise ValueError("Private key contains invalid hexadecimal characters")
+                    
+                    # Verify that it's a valid private key by creating an account
                     Account.from_key(key)
                     private_key = key
 
